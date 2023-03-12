@@ -10,11 +10,7 @@ import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.testnavapp2.destinations.DetailScreenDestination
-import com.example.testnavapp2.destinations.MainScreenDestination
-import com.example.testnavapp2.navArgs
 import com.ramcosta.composedestinations.annotation.Destination
-import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
 data class DetailScreenArgs(
     val enteredValue: String,
@@ -40,7 +36,7 @@ fun DetailScreen(
 
             Text(text = "Converted Entered value: ${viewModel.convertedEnteredValue}")
 
-            TextButton(onClick = { viewModel.showMainScreen() } ) {
+            TextButton(onClick = { viewModel.showMainScreen() }) {
                 Text("Go to MainScreen")
             }
         }

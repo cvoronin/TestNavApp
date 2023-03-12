@@ -1,6 +1,7 @@
 package com.example.testnavapp2
 
 import android.os.Bundle
+import android.os.Parcelable
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
@@ -35,8 +36,6 @@ class MainActivity : ComponentActivity() {
         setContent {
             MyAppTheme {
                 Scaffold { paddings ->
-//                    val navController = rememberNavController()
-
                     Box(
                         modifier = Modifier
                             .fillMaxSize()
@@ -69,37 +68,6 @@ class MainActivity : ComponentActivity() {
                             }
                         }
                     }
-
-
-//                    NavHost(
-//                        navController = navController,
-//                        startDestination = MainScreenDestination.route,
-//                        modifier = Modifier
-//                            .fillMaxSize()
-//                            .padding(paddings)
-//                    ) {
-//                        composable(MainScreenDestination.route) {
-//
-//                            val assistedFactory = mainScreenComponent.mainScreenViewModelFactory()
-//                            val viewModel = createSavedStateHandleViewModel(assistedFactory)
-//
-//                            MainScreen(
-//                                viewModel = viewModel,
-//                                onValueEntered = { navController.navigate("detail") }
-//                            )
-//                        }
-//                        composable(DetailScreenDestination.route) {
-//
-//                            val viewModel = createSimpleViewModel(
-//                                factory = detailScreenComponent.detailScreenViewModelFactory()
-//                            )
-//
-//                            DetailScreen(
-//                                viewModel = viewModel,
-//                                onGoToMainScreen = { navController.navigate("main") }
-//                            )
-//                        }
-//                    }
                 }
             }
         }
