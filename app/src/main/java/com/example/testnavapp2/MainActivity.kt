@@ -3,24 +3,23 @@ package com.example.testnavapp2
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
+import com.example.testnavapp2.destinations.DetailScreenDestination
+import com.example.testnavapp2.destinations.MainScreenDestination
 import com.example.testnavapp2.detailscreen.DetailScreen
 import com.example.testnavapp2.di.AppComponentProvider
 import com.example.testnavapp2.mainscreen.MainScreen
 import com.example.testnavapp2.ui.theme.MyAppTheme
+import com.example.testnavapp2.utils.createComposeNavigationViewModel
 import com.example.testnavapp2.utils.createSavedStateHandleViewModel
 import com.example.testnavapp2.utils.createSimpleViewModel
+import com.ramcosta.composedestinations.DestinationsNavHost
+import com.ramcosta.composedestinations.manualcomposablecalls.composable
 
 class MainActivity : ComponentActivity() {
 
@@ -36,38 +35,71 @@ class MainActivity : ComponentActivity() {
         setContent {
             MyAppTheme {
                 Scaffold { paddings ->
-                    val navController = rememberNavController()
+//                    val navController = rememberNavController()
 
-                    WindowInsets.statusBars
-                    NavHost(
-                        navController = navController,
-                        startDestination = "main",
+                    Box(
                         modifier = Modifier
                             .fillMaxSize()
                             .padding(paddings)
-                    ) {
-                        composable("main") {
+                    )
+                    {
+                        WindowInsets.statusBars
+                        DestinationsNavHost(navGraph = NavGraphs.root) {
+                            composable(MainScreenDestination) {
+                                val assistedFactory =
+                                    mainScreenComponent.mainScreenViewModelFactory()
+                                val viewModel = createSavedStateHandleViewModel(assistedFactory)
 
-                            val assistedFactory = mainScreenComponent.mainScreenViewModelFactory()
-                            val viewModel = createSavedStateHandleViewModel(assistedFactory)
+                                MainScreen(
+                                    viewModel = viewModel,
+                                    navigator = destinationsNavigator
+                                )
+                            }
 
-                            MainScreen(
-                                viewModel = viewModel,
-                                onValueEntered = { navController.navigate("detail") }
-                            )
-                        }
-                        composable("detail") {
+                            composable(DetailScreenDestination) {
+                                val assistedFactory =
+                                    detailScreenComponent.detailScreenViewModelFactory()
 
-                            val viewModel = createSimpleViewModel(
-                                factory = detailScreenComponent.detailScreenViewModelFactory()
-                            )
+                                val viewModel = createComposeNavigationViewModel(
+                                    assistedFactory,
+                                    destinationsNavigator
+                                )
 
-                            DetailScreen(
-                                viewModel = viewModel,
-                                onGoToMainScreen = { navController.navigate("main") }
-                            )
+                                DetailScreen(viewModel = viewModel)
+                            }
                         }
                     }
+
+
+//                    NavHost(
+//                        navController = navController,
+//                        startDestination = MainScreenDestination.route,
+//                        modifier = Modifier
+//                            .fillMaxSize()
+//                            .padding(paddings)
+//                    ) {
+//                        composable(MainScreenDestination.route) {
+//
+//                            val assistedFactory = mainScreenComponent.mainScreenViewModelFactory()
+//                            val viewModel = createSavedStateHandleViewModel(assistedFactory)
+//
+//                            MainScreen(
+//                                viewModel = viewModel,
+//                                onValueEntered = { navController.navigate("detail") }
+//                            )
+//                        }
+//                        composable(DetailScreenDestination.route) {
+//
+//                            val viewModel = createSimpleViewModel(
+//                                factory = detailScreenComponent.detailScreenViewModelFactory()
+//                            )
+//
+//                            DetailScreen(
+//                                viewModel = viewModel,
+//                                onGoToMainScreen = { navController.navigate("main") }
+//                            )
+//                        }
+//                    }
                 }
             }
         }

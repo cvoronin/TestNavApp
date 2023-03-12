@@ -7,17 +7,24 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.example.testnavapp2.destinations.DetailScreenDestination
+import com.example.testnavapp2.detailscreen.DetailScreenArgs
 import com.example.testnavapp2.mainscreen.viewModel.MainScreenViewModel
+import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.annotation.RootNavGraph
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
+@RootNavGraph(start = true)
+@Destination(route = "mainScreen")
 @Composable
 fun MainScreen(
     viewModel: MainScreenViewModel,
-    onValueEntered: (String) -> Unit
+    navigator: DestinationsNavigator
 ) {
     Column(
         modifier = Modifier
@@ -29,7 +36,7 @@ fun MainScreen(
     ) {
 
         Text(text = viewModel.createdAt)
-        
+
         OutlinedTextField(
             value = viewModel.value,
             onValueChange = { viewModel.value = it },
@@ -40,9 +47,14 @@ fun MainScreen(
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        TextButton(onClick = { onValueEntered(viewModel.value) } ) {
+        TextButton(
+            onClick = {
+                val args = DetailScreenArgs(viewModel.value, viewModel.createdAt)
+                navigator.navigate(
+                    DetailScreenDestination(args)
+                )
+            }) {
             Text(text = "Go!")
         }
-
     }
 }

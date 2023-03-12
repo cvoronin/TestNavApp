@@ -10,11 +10,24 @@ import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.example.testnavapp2.destinations.DetailScreenDestination
+import com.example.testnavapp2.destinations.MainScreenDestination
+import com.example.testnavapp2.navArgs
+import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
+data class DetailScreenArgs(
+    val enteredValue: String,
+    val mainScreenCreatedAt: String
+)
+
+@Destination(
+    route = "detailScreen",
+    navArgsDelegate = DetailScreenArgs::class
+)
 @Composable
 fun DetailScreen(
-    viewModel: DetailScreenViewModel,
-    onGoToMainScreen: () -> Unit
+    viewModel: DetailScreenViewModel
 ) {
     Surface(modifier = Modifier.fillMaxSize()) {
         Column(
@@ -25,9 +38,9 @@ fun DetailScreen(
 
             Text(text = "Created at: ${viewModel.createdAt}")
 
-            Text(text = "Entered value: value")
+            Text(text = "Converted Entered value: ${viewModel.convertedEnteredValue}")
 
-            TextButton(onClick = onGoToMainScreen) {
+            TextButton(onClick = { viewModel.showMainScreen() } ) {
                 Text("Go to MainScreen")
             }
         }
